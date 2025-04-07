@@ -1,7 +1,5 @@
-module.exports = [
-  'strapi::errors',
-  /* Replace 'strapi::security', with this snippet */
-  /* Beginning of snippet */
+module.exports = ({ env }) => [
+    "strapi::errors",
   {
     name: 'strapi::security',
     config: {
@@ -13,28 +11,25 @@ module.exports = [
             "'self'",
             'data:',
             'blob:',
-            'dl.airtable.com',
-            '833910365045-portfolio.s3.eu-west-3.amazonaws.com',
+            'res.cloudinary.com', // cloudinary images
+            'lh3.googleusercontent.com', // google avatars
+            'platform-lookaside.fbsbx.com', // facebook avatars
+            'dl.airtable.com', // strapi marketplace
+            `https://${env('AWS_BUCKET')}.s3.${env('AWS_REGION')}.amazonaws.com`
           ],
-          'media-src': [
-            "'self'",
-            'data:',
-            'blob:',
-            'dl.airtable.com',
-            '833910365045-portfolio.s3.eu-west-3.amazonaws.com',
-          ],
+          'media-src': ["'self'", 'data:', 'blob:', `https://${env('AWS_BUCKET')}.s3.${env('AWS_REGION')}.amazonaws.com`],
           upgradeInsecureRequests: null,
         },
       },
     },
   },
-  'strapi::logger',
-  'strapi::errors',
-  'strapi::cors',
-  'strapi::poweredBy',
-  'strapi::query',
-  'strapi::body',
-  'strapi::session',
-  'strapi::favicon',
-  'strapi::public',
-];
+    'strapi::logger',
+    "strapi::cors",
+    "strapi::poweredBy",
+    "strapi::logger",
+    "strapi::query",
+    "strapi::body",
+    "strapi::session",
+    "strapi::favicon",
+    "strapi::public",
+  ];
