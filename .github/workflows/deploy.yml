@@ -56,8 +56,8 @@ jobs:
             git pull origin main
 
             # Optionally, rebuild your Docker image(s) using Docker Compose
-            docker-compose pull
-            docker-compose build
+            docker compose pull
+            docker compose build
 
             # Start the updated services in detached mode
-            docker-compose up -d
+            docker compose up -d
