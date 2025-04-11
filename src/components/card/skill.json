@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_card_skills",
+  "info": {
+    "displayName": "skill",
+    "icon": "book",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "tags": {
+      "displayName": "Tag",
+      "type": "component",
+      "repeatable": true,
+      "component": "atom.tag"
+    },
+    "logo": {
+      "type": "string"
+    }
+  }
+}
