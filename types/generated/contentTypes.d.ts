@@ -369,6 +369,115 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiHomePageHomePage extends Struct.SingleTypeSchema {
+  collectionName: 'home_pages';
+  info: {
+    description: '';
+    displayName: 'HomePage';
+    pluralName: 'home-pages';
+    singularName: 'home-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    aboutMe: Schema.Attribute.RichText &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    aboutSectionName: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    baseline: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    contactDescription: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    contactLink: Schema.Attribute.Component<'molecule.contact-link', true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    contactSectionName: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    fullname: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::home-page.home-page'
+    >;
+    photosPreview: Schema.Attribute.Media<'images' | 'files', true> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    profilePicture: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios'
+    > &
+      Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    skills: Schema.Attribute.Component<'card.skill', true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    skillSectionName: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -878,6 +987,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::home-page.home-page': ApiHomePageHomePage;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

@@ -1,0 +1,27 @@
+# Ignore temporary files and caches.
+.tmp/
+.cache/
+
+# Ignore IDE-specific directories.
+.idea/
+.vscode/
+
+# Ignore Git version control files.
+.git/
+.gitignore
+
+# Ignore local node_modules, they will be reinstalled inside the container.
+node_modules/
+
+# Ignore build output if you're rebuilding inside Docker.
+build/
+dist/
+
+# Ignore data directories if they are only used for local development
+# or persistence outside the container (you may use volumes for these).
+data/
+
+# Optionally, ignore local environment files if they contain sensitive data
+# and you plan to inject environment variables through other means.
+.env
+.env.local

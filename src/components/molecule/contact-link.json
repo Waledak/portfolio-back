@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_molecule_contact_links",
+  "info": {
+    "displayName": "contactLink",
+    "icon": "globe"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    },
+    "logo": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    }
+  }
+}

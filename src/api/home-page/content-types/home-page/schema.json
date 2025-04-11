@@ -1,0 +1,139 @@
+{
+  "kind": "singleType",
+  "collectionName": "home_pages",
+  "info": {
+    "singularName": "home-page",
+    "pluralName": "home-pages",
+    "displayName": "HomePage",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "fullname": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "profilePicture": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "skills": {
+      "displayName": "skill",
+      "type": "component",
+      "repeatable": true,
+      "component": "card.skill",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": false
+    },
+    "baseline": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": true
+    },
+    "photosPreview": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "aboutMe": {
+      "type": "richtext",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": true
+    },
+    "skillSectionName": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "aboutSectionName": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "contactSectionName": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "contactDescription": {
+      "type": "text",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "contactLink": {
+      "displayName": "contactLink",
+      "type": "component",
+      "repeatable": true,
+      "component": "molecule.contact-link",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": false
+    }
+  }
+}
