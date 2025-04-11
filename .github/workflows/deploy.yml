@@ -22,7 +22,8 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             # Change directory to your deployment folder
-            cd /portfolio/portfolio-back
+            cd portfolio
+            cd portfolio-back
             
             # Create .env file using GitHub secrets
             cat > .env <<EOF
