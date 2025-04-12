@@ -19,7 +19,7 @@ RUN apk update && apk add --no-cache \
 # Install pnpm globally
 RUN npm install -g pnpm
 
-# Set environment to production
+# Set environment to production and increase Node's memory limit
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 ENV NODE_OPTIONS="--max-old-space-size=4096"
@@ -27,12 +27,15 @@ ENV NODE_OPTIONS="--max-old-space-size=4096"
 # Create and use a working directory
 WORKDIR /opt/app
 
-# Copy dependency files and install
+# Copy dependency files and install dependencies
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
 # Copy the rest of your Strapi project
 COPY . .
+
+# Rebuild sharp to ensure the native bindings compile correctly
+RUN pnpm rebuild sharp
 
 # Change ownership to a non-root user
 RUN chown -R node:node /opt/app
