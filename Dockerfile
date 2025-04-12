@@ -22,6 +22,7 @@ RUN npm install -g pnpm
 # Set environment to production
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 # Create and use a working directory
 WORKDIR /opt/app
