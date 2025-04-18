@@ -15,7 +15,8 @@
       "displayName": "Tag",
       "type": "component",
       "repeatable": true,
-      "component": "atom.tag"
+      "component": "atom.tag",
+      "required": true
     },
     "logo": {
       "type": "string"
