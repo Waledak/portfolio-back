@@ -22,7 +22,8 @@ export interface CardSkill extends Struct.ComponentSchema {
   attributes: {
     logo: Schema.Attribute.String;
     name: Schema.Attribute.String & Schema.Attribute.Required;
-    tags: Schema.Attribute.Component<'atom.tag', true>;
+    tags: Schema.Attribute.Component<'atom.tag', true> &
+      Schema.Attribute.Required;
   };
 }
 
