@@ -21,5 +21,8 @@ module.exports = ({ env }) => ({
                 delete: {},
             },
         },
-    }
+    },
+    'drag-drop-content-types-strapi5': {
+        enabled: true,
+    },
 });
