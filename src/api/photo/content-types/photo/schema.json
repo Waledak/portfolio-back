@@ -18,6 +18,10 @@
       "allowedTypes": [
         "images"
       ]
+    },
+    "rank": {
+      "type": "integer",
+      "required": false
     }
   }
 }
