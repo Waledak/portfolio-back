@@ -27,6 +27,21 @@ export interface CardSkill extends Struct.ComponentSchema {
   };
 }
 
+export interface MediaFileItem extends Struct.ComponentSchema {
+  collectionName: 'components_media_file_items';
+  info: {
+    description: '';
+    displayName: 'file-item';
+    icon: 'file';
+  };
+  attributes: {
+    file: Schema.Attribute.Media<'files'> & Schema.Attribute.Required;
+    name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+  };
+}
+
 export interface MoleculeContactLink extends Struct.ComponentSchema {
   collectionName: 'components_molecule_contact_links';
   info: {
@@ -49,6 +64,7 @@ declare module '@strapi/strapi' {
     export interface ComponentSchemas {
       'atom.tag': AtomTag;
       'card.skill': CardSkill;
+      'media.file-item': MediaFileItem;
       'molecule.contact-link': MoleculeContactLink;
     }
   }
