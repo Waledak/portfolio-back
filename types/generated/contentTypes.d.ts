@@ -401,6 +401,7 @@ export interface ApiHomePageHomePage extends Struct.SingleTypeSchema {
           localized: true;
         };
       }>;
+    additionalFiles: Schema.Attribute.Component<'media.file-item', true>;
     baseline: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -563,6 +564,7 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
         };
       }>;
     publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Private;
     startDate: Schema.Attribute.Date;
     techno: Schema.Attribute.Component<'card.skill', true> &
       Schema.Attribute.SetPluginOptions<{

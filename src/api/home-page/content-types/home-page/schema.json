@@ -136,17 +136,22 @@
       "required": false
     },
     "cv": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
       "allowedTypes": [
         "files"
       ],
-      "type": "media",
-      "multiple": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      },
-      "required": true
+      }
+    },
+    "additionalFiles": {
+      "type": "component",
+      "repeatable": true,
+      "component": "media.file-item"
     }
   }
 }

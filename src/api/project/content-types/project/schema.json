@@ -80,6 +80,11 @@
     },
     "startDate": {
       "type": "date"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "private": true
     }
   }
 }
