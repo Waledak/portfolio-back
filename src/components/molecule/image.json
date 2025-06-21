@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_molecule_images",
+  "info": {
+    "displayName": "image",
+    "icon": "crop"
+  },
+  "options": {},
+  "attributes": {
+    "image": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "required": true
+    }
+  }
+}
