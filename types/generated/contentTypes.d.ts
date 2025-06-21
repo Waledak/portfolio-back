@@ -593,6 +593,156 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiTechnologyTechnology extends Struct.CollectionTypeSchema {
+  collectionName: 'technologies';
+  info: {
+    description: '';
+    displayName: 'Technology';
+    pluralName: 'technologies';
+    singularName: 'technology';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    category: Schema.Attribute.Enumeration<
+      ['frontend', 'backend', 'database', 'design', 'cloud']
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    level: Schema.Attribute.Enumeration<
+      ['beginner', 'intermediate', 'advanced', 'expert']
+    >;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::technology.technology'
+    >;
+    name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    timeline_items: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::timeline-item.timeline-item'
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiTimelineItemTimelineItem
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'timeline_items';
+  info: {
+    description: '';
+    displayName: 'Timeline-item';
+    pluralName: 'timeline-items';
+    singularName: 'timeline-item';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    badge: Schema.Attribute.DynamicZone<
+      ['molecule.image', 'molecule.lucide-icon']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 1;
+        },
+        number
+      >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    endDate: Schema.Attribute.Date &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::timeline-item.timeline-item'
+    >;
+    location: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    startDate: Schema.Attribute.Date &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    subtitle: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    technologies: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::technology.technology'
+    >;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    type: Schema.Attribute.Enumeration<
+      ['experience', 'education', 'certification', 'freelance']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'experience'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -1105,6 +1255,8 @@ declare module '@strapi/strapi' {
       'api::home-page.home-page': ApiHomePageHomePage;
       'api::photo.photo': ApiPhotoPhoto;
       'api::project.project': ApiProjectProject;
+      'api::technology.technology': ApiTechnologyTechnology;
+      'api::timeline-item.timeline-item': ApiTimelineItemTimelineItem;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

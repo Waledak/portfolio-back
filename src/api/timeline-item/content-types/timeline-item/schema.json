@@ -1,0 +1,107 @@
+{
+  "kind": "collectionType",
+  "collectionName": "timeline_items",
+  "info": {
+    "singularName": "timeline-item",
+    "pluralName": "timeline-items",
+    "displayName": "Timeline-item",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
+      "required": true
+    },
+    "subtitle": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": true
+    },
+    "location": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "description": {
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "startDate": {
+      "type": "date",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "endDate": {
+      "type": "date",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "experience",
+        "education",
+        "certification",
+        "freelance"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
+      "required": true,
+      "default": "experience"
+    },
+    "technologies": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::technology.technology",
+      "inversedBy": "timeline_items"
+    },
+    "badge": {
+      "type": "dynamiczone",
+      "components": [
+        "molecule.image",
+        "molecule.lucide-icon"
+      ],
+      "max": 1,
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    }
+  }
+}
