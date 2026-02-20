@@ -1,44 +1,49 @@
-services:
-  strapi:
-    image: ghcr.io/waledak/portfolio-back:${APP_VERSION}
-    restart: unless-stopped
-    env_file: .env
-    environment:
-      NODE_ENV: production
-      HOST: 0.0.0.0
-      PORT: 1337
+# syntax=docker/dockerfile:1
 
-      DATABASE_CLIENT: postgres
-      DATABASE_HOST: postgres
-      DATABASE_PORT: 5432
-      DATABASE_NAME: portfolio
-      DATABASE_USERNAME: portfolio_user
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-      DATABASE_SSL: "false"
+########################
+# 1) deps
+########################
+FROM node:22.14-alpine AS deps
+WORKDIR /opt/app
 
-      SERVER_URL: https://api.tanguycirillo.fr
+# libs natives (sharp/vips)
+RUN apk add --no-cache \
+  build-base autoconf automake zlib-dev libpng-dev nasm bash vips-dev git python3 make g++
 
-    networks:
-      - internal
-      - edge
+RUN npm i -g pnpm
 
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.portfolio-strapi.rule=Host(`api.tanguycirillo.fr`)"
-      - "traefik.http.routers.portfolio-strapi.entrypoints=websecure"
-      - "traefik.http.routers.portfolio-strapi.tls=true"
-      - "traefik.http.routers.portfolio-strapi.tls.certresolver=le"
-      - "traefik.http.services.portfolio-strapi.loadbalancer.server.port=1337"
-      - "traefik.docker.network=monredon_edge"
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
-      - "traefik.http.routers.portfolio-strapi-http.rule=Host(`api.tanguycirillo.fr`)"
-      - "traefik.http.routers.portfolio-strapi-http.entrypoints=web"
-      - "traefik.http.routers.portfolio-strapi-http.middlewares=redirect-to-https@docker"
+########################
+# 2) build
+########################
+FROM deps AS build
+WORKDIR /opt/app
+COPY . .
+ENV NODE_ENV=production
+RUN pnpm run build
 
-networks:
-  edge:
-    external: true
-    name: monredon_edge
-  internal:
-    external: true
-    name: monredon_internal
+########################
+# 3) runtime
+########################
+FROM node:22.14-alpine AS runtime
+WORKDIR /opt/app
+
+# vips runtime
+RUN apk add --no-cache vips-dev
+RUN npm i -g pnpm
+
+ENV NODE_ENV=production
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+
+# copie uniquement ce qu'il faut
+COPY --from=build /opt/app ./
+
+# user non-root
+RUN addgroup -S nodejs && adduser -S node -G nodejs \
+  && chown -R node:node /opt/app
+USER node
+
+EXPOSE 1337
+CMD ["pnpm", "start"]

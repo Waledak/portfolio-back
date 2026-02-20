@@ -1,55 +1,44 @@
-version: "3"
 services:
   strapi:
-    container_name: strapi
-    build: .
-    image: strapi:latest
+    image: ghcr.io/waledak/portfolio-back:${APP_VERSION}
     restart: unless-stopped
     env_file: .env
     environment:
-      NODE_OPTIONS: "--max-old-space-size=4096"
-      DATABASE_CLIENT: ${DATABASE_CLIENT}
-      DATABASE_HOST: strapiDB
-      DATABASE_PORT: ${DATABASE_PORT}
-      DATABASE_NAME: ${DATABASE_NAME}
-      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 1337
+
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: portfolio
+      DATABASE_USERNAME: portfolio_user
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
-      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
-      APP_KEYS: ${APP_KEYS}
-      NODE_ENV: ${NODE_ENV}
-    volumes:
-      # Only mount what’s necessary in production:
-      - ./.env:/opt/app/.env
-      - ./public/uploads:/opt/app/public/uploads
-    ports:
-      - "1337:1337"
-    networks:
-      - strapi
-    depends_on:
-      - strapiDB
+      DATABASE_SSL: "false"
 
-  strapiDB:
-    container_name: strapiDB
-    platform: linux/amd64    # Only if needed for cross-platform compatibility
-    restart: unless-stopped
-    env_file: .env
-    image: postgres:17.4-alpine
-    environment:
-      POSTGRES_USER: ${DATABASE_USERNAME}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: ${DATABASE_NAME}
-    volumes:
-      - strapi-data:/var/lib/postgresql/data/
-    ports:
-      - "5432:5432"
-    networks:
-      - strapi
+      SERVER_URL: https://api.tanguycirillo.fr
 
-volumes:
-  strapi-data:
+    networks:
+      - internal
+      - edge
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portfolio-strapi.rule=Host(`api.tanguycirillo.fr`)"
+      - "traefik.http.routers.portfolio-strapi.entrypoints=websecure"
+      - "traefik.http.routers.portfolio-strapi.tls=true"
+      - "traefik.http.routers.portfolio-strapi.tls.certresolver=le"
+      - "traefik.http.services.portfolio-strapi.loadbalancer.server.port=1337"
+      - "traefik.docker.network=monredon_edge"
+
+      - "traefik.http.routers.portfolio-strapi-http.rule=Host(`api.tanguycirillo.fr`)"
+      - "traefik.http.routers.portfolio-strapi-http.entrypoints=web"
+      - "traefik.http.routers.portfolio-strapi-http.middlewares=redirect-to-https@docker"
 
 networks:
-  strapi:
-    name: strapi
-    driver: bridge
+  edge:
+    external: true
+    name: monredon_edge
+  internal:
+    external: true
+    name: monredon_internal
