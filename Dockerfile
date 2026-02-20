@@ -1,51 +1,44 @@
-# Use the Alpine variant of Node for a smaller base image
-FROM node:22.14-alpine
+services:
+  strapi:
+    image: ghcr.io/waledak/portfolio-back:${APP_VERSION}
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 1337
 
-# Install dependencies required to build native Node modules (like Sharp)
-RUN apk update && apk add --no-cache \
-    build-base \
-    autoconf \
-    automake \
-    zlib-dev \
-    libpng-dev \
-    nasm \
-    bash \
-    vips-dev \
-    git \
-    python3 \
-    make \
-    g++
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: portfolio
+      DATABASE_USERNAME: portfolio_user
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_SSL: "false"
 
-# Install pnpm globally
-RUN npm install -g pnpm
+      SERVER_URL: https://api.tanguycirillo.fr
 
-# Set environment to production and increase Node's memory limit
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
-ENV NODE_OPTIONS="--max-old-space-size=4096"
+    networks:
+      - internal
+      - edge
 
-# Create and use a working directory
-WORKDIR /opt/app
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portfolio-strapi.rule=Host(`api.tanguycirillo.fr`)"
+      - "traefik.http.routers.portfolio-strapi.entrypoints=websecure"
+      - "traefik.http.routers.portfolio-strapi.tls=true"
+      - "traefik.http.routers.portfolio-strapi.tls.certresolver=le"
+      - "traefik.http.services.portfolio-strapi.loadbalancer.server.port=1337"
+      - "traefik.docker.network=monredon_edge"
 
-# Copy dependency files and install dependencies
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+      - "traefik.http.routers.portfolio-strapi-http.rule=Host(`api.tanguycirillo.fr`)"
+      - "traefik.http.routers.portfolio-strapi-http.entrypoints=web"
+      - "traefik.http.routers.portfolio-strapi-http.middlewares=redirect-to-https@docker"
 
-# Copy the rest of your Strapi project
-COPY . .
-
-# Rebuild sharp to ensure the native bindings compile correctly
-RUN pnpm rebuild sharp
-
-# Change ownership to a non-root user
-RUN chown -R node:node /opt/app
-USER node
-
-# Build your Strapi app (ensure "build" script exists in package.json)
-RUN pnpm run build
-
-# Expose Strapi's default port
-EXPOSE 1337
-
-# Start your app in production mode (ensure "start" script exists in package.json)
-CMD ["pnpm", "start"]
+networks:
+  edge:
+    external: true
+    name: monredon_edge
+  internal:
+    external: true
+    name: monredon_internal
