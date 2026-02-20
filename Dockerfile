@@ -38,11 +38,7 @@ ENV NODE_ENV=production
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 # copie uniquement ce qu'il faut
-COPY --from=build /opt/app ./
-
-# user non-root
-RUN addgroup -S nodejs && adduser -S node -G nodejs \
-  && chown -R node:node /opt/app
+COPY --from=build --chown=node:node /opt/app ./
 USER node
 
 EXPOSE 1337
